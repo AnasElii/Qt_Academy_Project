@@ -48,6 +48,7 @@ qt_add_qml_module(${CMAKE_PROJECT_NAME}
     VERSION 1.0
     QML_FILES
     interfaces/main.qml
+    interfaces/CustomItem.qml
     interfaces/components/MyPin.qml
     RESOURCES
     ${RESOURCE_DIR}
