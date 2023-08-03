@@ -12,22 +12,10 @@ ApplicationWindow {
     title: "Reviewed"
     visible: true
 
+    property string idP: ""
+
     ListModel {
         id: commentModel
-
-        ListElement {
-            timestamp: "2 hours ago"
-            username: "JohnDoe"
-            pinID: 1
-            text: "This is a comment about the pin."
-        }
-
-        ListElement {
-            timestamp: "2 hours ago"
-            username: "JohnDoe"
-            pinID: 1
-            text: "This is a comment about the pin."
-        }
     }
 
     StackView {

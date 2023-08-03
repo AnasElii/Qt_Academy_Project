@@ -5,7 +5,8 @@ import QtQuick.Layouts 6.5
 import QtQuick.Dialogs 6.5
 import "components"
 import mainLib 1.0
-import "./components/CommentModel.js" as CommentModel // Import the CommentModel.js file
+
+// import "./components/CommentModel.js" as CommentModel // Import the CommentModel.js file
 
 Item {
     id: root
@@ -15,7 +16,7 @@ Item {
     property bool isComment: false
     property string urlSource: "https://images.pexels.com/photos/1570264/pexels-photo-1570264.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
 
-    function handlePressAndHold(pinId) {
+    function deletePin(pinId) {
         // Handle the press and hold event here
         if (pinId < 0)
             return;
@@ -24,14 +25,19 @@ Item {
         pin.destroy();
     }
 
-    function handleDoubleClick(pinId, comment) {
+    function updatePin(pinId, comment) {
         // Handle the double click event here
         if (pinId < 0 && comment == "")
             return;
         var pin = pinList[pinId]; // Get the pin object
+
+        // Update the comment
         dialog.visible = true;
         dialogInput.text = pin.comment;
-        console.log("new Comment ", dialogInput.text);
+        idP = pin.pinId;
+
+        // Debug
+        console.log("pin comment: " + pin.comment + " | comment: " + comment + " | list comment: " + commentModel.get(pin.pinId).text);
     }
 
     function addComment(username, timestamp, text, pinId) {
@@ -60,8 +66,8 @@ Item {
         MouseArea {
             anchors.fill: parent
             onClicked: {
-                var commentList = CommentModel.getCommentData();
-                var index = CommentModel.getCommentData().length - 1;
+                // var commentList = CommentModel.getCommentData();
+                // var index = CommentModel.getCommentData().length - 1;
                 stackView.push("CommentPage.qml");
             }
 
@@ -79,6 +85,7 @@ Item {
     // Canvas To Draw On Image And Add Pins On Click Event On Image
     Canvas {
         id: mycanvas
+
         anchors.fill: parent
 
         onPaint: {
@@ -125,8 +132,8 @@ Item {
                     "y": mouse.y
                 });
             // Connect the pressAndHoldSignal3
-            pin.pinPressAndHeld.connect(handlePressAndHold);
-            pin.pinDoubleClick.connect(handleDoubleClick);
+            pin.pinPressAndHeld.connect(deletePin);
+            pin.pinDoubleClick.connect(updatePin);
             pinList.push(pin);
             pinCount++;
             pin.pins = pinList;
@@ -247,6 +254,10 @@ Item {
         onAccepted: {
             console.log("Sending message: ", dialogInput.text);
             pinList[pinList.length - 1].comment = dialogInput.text;
+            if (idP !== "") {
+                commentModel.get(idP).text = dialogInput.text;
+                idP = "";
+            }
             dialogInput.text = "";
             inputs.visible = false;
         }

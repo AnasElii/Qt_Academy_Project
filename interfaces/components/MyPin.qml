@@ -24,11 +24,11 @@ Item {
             console.log("Comment: " + comment);
         }
 
-        onPositionChanged: {
-            console.log("position changed");
-            root.x = mouse.x;
-            root.y = mouse.y;
-        }
+        // onPositionChanged: {
+        //     console.log("position changed");
+        //     root.x = mouse.x;
+        //     root.y = mouse.y;
+        // }
 
         onPressAndHold: {
             console.log("press and hold");

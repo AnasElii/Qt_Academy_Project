@@ -2,7 +2,8 @@ import QtQuick 6.5
 import QtQuick.Controls 6.5
 import "components" // Import the components folder
 import mainLib 1.0
-import "./components/CommentModel.js" as CommentModel // Import the CommentModel.js file
+
+// import "./components/CommentModel.js" as CommentModel // Import the CommentModel.js file
 
 Rectangle {
     id: root
@@ -23,8 +24,8 @@ Rectangle {
         MouseArea {
             anchors.fill: parent
             onClicked: {
-                var commentList = CommentModel.getCommentData();
-                var index = CommentModel.getCommentData().length - 1;
+                // var commentList = CommentModel.getCommentData();
+                // var index = CommentModel.getCommentData().length - 1;
                 stackView.pop();
             }
 
