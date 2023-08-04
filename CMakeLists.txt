@@ -35,6 +35,8 @@ set(RESOURCE_DIR
     "resources/fonts/fonts.txt"
 
     # images
+    "resources/images/cover.png"
+    "resources/images/Profile.jpg"
 
     # icons
     "resources/icons/pin-circle.svg"
@@ -57,9 +59,8 @@ qt_add_qml_module(${CMAKE_PROJECT_NAME}
 
     # components
     interfaces/components/MyPin.qml
-    interfaces/components/CommentDelegate.qml
+    interfaces/components/MyComment.qml
     interfaces/components/ReplyDelegate.qml
-    interfaces/components/CommentModel.js
     RESOURCES
     ${RESOURCE_DIR}
 )

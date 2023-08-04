@@ -121,7 +121,6 @@ Item {
         id: canvasMouseArea
 
         anchors.fill: parent
-        visible: false
 
         onClicked: {
             // Retrieve the x and y coordinates on mouse click
@@ -231,6 +230,9 @@ Item {
         title: "Pin"
         standardButtons: Dialog.Ok | Dialog.Cancel
         visible: false
+        anchors {
+            centerIn: parent
+        }
 
         ColumnLayout {
             id: dialogLayout

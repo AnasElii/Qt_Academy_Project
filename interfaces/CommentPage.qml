@@ -8,8 +8,23 @@ import mainLib 1.0
 Rectangle {
     id: root
 
+    Text {
+        id: commentPageTitle
+
+        text: "Comments"
+        font.family: "Roboto"
+        font.pixelSize: 30
+        color: "#000000"
+        anchors {
+            left: parent.left
+            top: parent.top
+            margins: 20
+        }
+    }
+
     Rectangle {
         id: openCommentPage
+
         width: 30
         height: 30
         z: 1
@@ -41,18 +56,23 @@ Rectangle {
     }
 
     ScrollView {
-        anchors.fill: parent
+        anchors {
+            top: commentPageTitle.bottom
+            left: root.left
+            right: root.right
+            margins: 20
+        }
 
         ListView {
-            width: parent.width
-            height: parent.height // Set the height to the height of the ScrollView
+            anchors.fill: parent
             spacing: 10
 
             model: commentModel
 
-            delegate: CommentDelegate {
-                width: parent.width
-                height: 150
+            delegate: MyComment {
+
+                // width: parent.width
+                // height: 150
 
                 timestamp: model.timestamp
                 username: model.username
