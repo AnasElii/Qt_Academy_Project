@@ -1,29 +1,31 @@
 {
-    // Use IntelliSense to learn about possible attributes.
-    // Hover to view descriptions of existing attributes.
-    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Launch",
+            "name": "C/C++: clang++ build and debug active file",
             "type": "cppdbg",
-            "request": "launch",
             "windows": {
                 "type": "cppvsdbg"
             },
+            "request": "launch",
             "program": "${command:cmake.launchTargetPath}",
             "cwd": "${workspaceFolder}",
             "args": [],
-            "visualizerFile": "c:\\Users\\Aninoss\\AppData\\Roaming\\Code\\User\\workspaceStorage\\34084c4241d05b131605984c84b098b4\\tonka3000.qtvsctools\\qt.natvis.xml"
+            "stopAtEntry": false,
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "lldb",
+            "visualizerFile": "/Users/aninoss/Library/Application Support/Code/User/workspaceStorage/3ddbe401100db2572d9fd03342ebe40c/tonka3000.qtvsctools/qt.natvis.xml"
         },
         {
+            "name": "QML Debug",
             "type": "qml",
             "request": "attach",
-            "name": "Attach to QML Debugger",
             "host": "localhost",
             "port": 12150,
-            "paths": [],
-            "trace": false
+            "paths": {
+                "qrc:/mainLib/interfaces": "${workspaceFolder}/interfaces"
+            }
         }
     ]
 }
