@@ -9,13 +9,12 @@
         "string": "cpp",
         "string_view": "cpp",
         "vector": "cpp",
-        "qnetworkrequest": "cpp"
+        "qnetworkrequest": "cpp",
+        "qurlquery": "cpp",
+        "qjsonarray": "cpp",
+        "qscopedpointer": "cpp"
     },
     "cmake.configureArgs": [
-        "-Wno-dev",
-        "-DCMAKE_BUILD_TYPE=Debug",
-    ],
-    "cmake.buildDirectory": "${workspaceFolder}/build",
-    "qmlhelper.debug.sortMembers": true,
-    "qmlhelper.debug.filterFunctions": false
+        "-Wno-dev"
+    ]
 }

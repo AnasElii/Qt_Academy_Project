@@ -1,267 +1,260 @@
-import QtQuick 6.5
-import QtQuick.Controls.Material 6.5
-import QtQuick.Shapes 6.5
-import QtQuick.Layouts 6.5
-import QtQuick.Dialogs 6.5
-import "components"
-import mainLib 1.0
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
 
-// import "./components/CommentModel.js" as CommentModel // Import the CommentModel.js file
+Page{
+    id: canvasPage
 
-Item {
-    id: root
+    title: qsTr("Canvas Page")
 
-    property list<MyPin> pinList
-    property int pinCount: 0
-    property bool isComment: false
-    property string urlSource: "https://images.pexels.com/photos/1570264/pexels-photo-1570264.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+    property alias newComment: newComment
 
-    function deletePin(pinId) {
-        // Handle the press and hold event here
-        if (pinId < 0)
-            return;
-        var pin = pinList[pinId]; // Get the pin object
-        console.log("Destroying pin: ", pin.pinId);
-        pin.destroy();
+    Component.onCompleted:{
+        root.navBar.visible= true;
+        root.navBar.flickable = flickable
+        root.navBar.sheet = sheet;
+        root.navBar.rcBackground = rcBackground;
+        root.navBar.popup= newComment;
     }
 
-    function updatePin(pinId, comment) {
-        // Handle the double click event here
-        if (pinId < 0 && comment == "")
-            return;
-        var pin = pinList[pinId]; // Get the pin object
+    Flickable{
+        id: flickable
 
-        // Update the comment
-        dialog.visible = true;
-        dialogInput.text = pin.comment;
-        idP = pin.pinId;
+        width: parent.width
+        height: parent.height
+        contentHeight: image.height
+        contentWidth: image.width
 
-        // Debug
-        console.log("pin comment: " + pin.comment + " | comment: " + comment + " | list comment: " + commentModel.get(pin.pinId).text);
-    }
-
-    function addComment(username, timestamp, text, pinId) {
-        commentModel.append({
-                "timestamp": timestamp,
-                "username": username,
-                "text": text,
-                "pinID": pinId,
-                "commentID": commentModel.count
-            });
-    }
-
-    Rectangle {
-        id: openCommentPage
-        width: 30
-        height: 30
-        z: 1
-        color: "transparent"
-        visible: true
-        anchors {
-            right: parent.right
-            top: parent.top
-            margins: 20
-        }
-
-        MouseArea {
-            anchors.fill: parent
-            onClicked: {
-                // var commentList = CommentModel.getCommentData();
-                // var index = CommentModel.getCommentData().length - 1;
-                stackView.push("CommentPage.qml");
-            }
-
-            Image {
-                id: commentIcon
-
-                source: "qrc:/mainLib/resources/icons/comment.svg"
-                anchors.fill: parent
-                fillMode: Image.PreserveAspectFit
-                smooth: true
-            }
-        }
-    }
-
-    // Canvas To Draw On Image And Add Pins On Click Event On Image
-    Canvas {
-        id: mycanvas
-
-        anchors.fill: parent
-
-        onPaint: {
-            // Get the x and y coordinates of the mouse cursor
-            var x = mouse.x;
-            var y = mouse.y;
-
-            // Draw a line at the mouse cursor position
-            var painter = mycanvas.getContext('2d');
-            ctx.fillStyle = Qt.rgba(1, 1, 1, 1);
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.fillRect(50, 50, 100, 100);
-            painter.strokeStyle = "black";
-            painter.lineWidth = 2;
-            painter.beginPath();
-            painter.moveTo(x, y);
-            painter.lineTo(x + 1, y + 1);
-            painter.stroke();
-            console.log("Painted at " + x + ", " + y);
-        }
-
-        Image {
+        Image{
             id: image
-            source: urlSource
-            anchors.centerIn: parent
-            fillMode: Image.PreserveAspectFit
-            width: parent.width
+
+            source: "qrc:/resources/images/Bitmap.png"
         }
     }
 
-    // Mouse Area To Add Pin On Click Event
-    MouseArea {
-        id: canvasMouseArea
+    // Sheet Comment
+    Rectangle {
+        id: sheet
+
+        width: parent.width
+        height: parent.height
+
+        color: "#FFF"
+        radius: 10
+
+        y: parent.height + 10
+        x: 0
+        z: 1
+
+        Rectangle{
+            width: 40
+            height: 5
+            radius: 5
+            color: "#CCC"
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.top: parent.top
+            anchors.topMargin: 5
+        }
+
+        states: [
+
+            State {
+                name: "visible"
+                PropertyChanges { target: sheet; y: canvasPage.height / 6 }
+            },
+
+            State {
+                name: "hidden"
+                PropertyChanges { target: sheet; y: canvasPage.height + 10 }
+            }
+        ]
+
+        transitions: [
+
+            Transition {
+                from: "hidden"; to: "visible"
+                NumberAnimation { properties: "y"; duration: 300 }
+            },
+
+            Transition {
+                from: "visible"; to: "hidden"
+                NumberAnimation { properties: "y"; duration: 300 }
+            }
+        ]
+
+        Flickable{
+            anchors{
+                fill: parent
+                topMargin: 20
+                leftMargin: 10
+                rightMargin: 10
+            }
+            clip: true
+            contentHeight: clAll.implicitHeight
+
+            ColumnLayout{
+                id: clAll
+
+                width: parent.width
+                Label{
+                    id: label
+                    text: "Comments"
+                    font.pointSize: 34
+                    font.styleName: "Bold"
+                    leftPadding: 20
+                    bottomPadding: 15
+                }
+
+                ColumnLayout{
+                    id: listInfoContent
+
+                    Layout.fillWidth: true
+
+                    Repeater{
+                        model: root.commentList
+
+                        delegate: CommentCumponent {
+                            Layout.fillWidth: true
+                            
+                            commentID: model.index
+                            usernameText: model.username
+                            commentText: model.comment
+                            timeText: model.time
+                            awner: model.awner
+                            replyList: model.replyList
+
+                            Text{
+                                text: model.index + " " + commentID
+                            }
+                        }
+                    }
+                }
+
+                Rectangle{
+                    opacity: 0
+                    height: 100
+                    Layout.fillWidth: true
+                }
+            }
+        }
+    }
+
+    // Background
+    Rectangle{
+        id: rcBackground
 
         anchors.fill: parent
-
-        onClicked: {
-            // Retrieve the x and y coordinates on mouse click
-            console.log("Mouse clicked at x:", mouse.x, "y:", mouse.y);
-            var pin = Qt.createComponent('qrc:/mainLib/interfaces/components/MyPin.qml').createObject(root, {
-                    "pinId": pinCount.toString(),
-                    "x": mouse.x,
-                    "y": mouse.y
-                });
-            // Connect the pressAndHoldSignal3
-            pin.pinPressAndHeld.connect(deletePin);
-            pin.pinDoubleClick.connect(updatePin);
-            pinList.push(pin);
-            pinCount++;
-            pin.pins = pinList;
-            inputs.visible = true;
-            console.log(pin.pinId, " | ", pin.x, " | ", pin.y, " | ", pin.visible);
-            canvasMouseArea.visible = false;
-        }
-    }
-
-    // Inputs
-    RowLayout {
-        id: inputs
-
-        spacing: 10
-        anchors {
-            left: parent.left
-            right: parent.right
-            bottom: addPinButton.top
-            margins: 10
-        }
-        height: 30
+        color: "black"
+        opacity: 0
         visible: false
 
-        TextField {
-            id: input
-
-            Layout.fillWidth: true
-            height: 20
-        }
-
-        Button {
-            text: "Send"
-            onClicked: {
-                if (input.text == "") {
-                    dialog.visible = true;
-                    isComment = false;
-                    return;
-                }
-
-                // Add the comment to the pin
-                pinList[pinList.length - 1].comment = input.text;
-
-                // Add the comment to the comment model
-                addComment("Anas El", "Just now", input.text, pinList[pinList.length - 1].pinId.toString());
-
-                // Reset the input
-                isComment = false;
-                input.text = "";
-                inputs.visible = false;
-            }
-        }
-    }
-
-    // Add Pin Button
-    Rectangle {
-        id: addPinButton
-
-        width: 50
-        height: 50
-        anchors {
-            right: parent.right
-            bottom: parent.bottom
-            margins: 20
-        }
-        radius: 25
-        opacity: 0.6
-
-        MouseArea {
+        MouseArea{
             anchors.fill: parent
 
-            onClicked: {
-                if (isComment == false) {
-                    console.log("Add pin button clicked");
-                    canvasMouseArea.visible = true;
-                    isComment = true;
+            onClicked:{
+                if (sheet.state === "hidden") {
+                    sheet.state = "visible";
+                    rcBackground.visible = true;
+                } else {
+                    sheet.state = "hidden";
+                    rcBackground.visible = false;
                 }
-            }
-
-            Image {
-                id: addPinIcon
-
-                source: "qrc:/mainLib/resources/icons/pin-circle.svg"
-                anchors.centerIn: parent
-                fillMode: Image.PreserveAspectFit
-                width: parent.width * 0.8
-                smooth: true
             }
         }
     }
 
-    // Dialog To CHeck For Comment
-    Dialog {
-        id: dialog
+    // Input Comment
+    Popup {
+        id: newComment
 
-        title: "Pin"
-        standardButtons: Dialog.Ok | Dialog.Cancel
-        visible: false
-        anchors {
-            centerIn: parent
-        }
+        anchors.centerIn: parent
+        width: parent.width - 40
+        height: 200
+        modal: true
+
+        property string commentID: ""
+        property string replyID: ""
+        property string type: ""
+        property alias newCommentTextField: newCommentTextField
 
         ColumnLayout {
-            id: dialogLayout
-            spacing: 10
-            anchors {
-                left: parent.left
-                right: parent.right
-                top: parent.top
-                bottom: parent.bottom
-                margins: 10
+            anchors.fill: parent
+
+            Label {
+                text: qsTr("New Comment")
+                font.styleName: "Semibold"
+
+                Layout.alignment: Qt.AlignHCenter
             }
 
             TextField {
-                id: dialogInput
+                id: newCommentTextField
+
+                placeholderText: qsTr("Enter project name")
 
                 Layout.fillWidth: true
-                height: 20
-            }
-        }
+                Layout.leftMargin: 10
+                Layout.rightMargin: 10
 
-        onAccepted: {
-            console.log("Sending message: ", dialogInput.text);
-            pinList[pinList.length - 1].comment = dialogInput.text;
-            if (idP !== "") {
-                commentModel.get(idP).text = dialogInput.text;
-                idP = "";
+                Keys.onReturnPressed: {
+                    if(btnAdd.enabled)
+                        btnAdd.clicked()
+                }
             }
-            dialogInput.text = "";
-            inputs.visible = false;
+
+            RowLayout{
+                Layout.alignment: Qt.AlignHCenter
+                Button {
+                    id: btnAdd
+                    text: qsTr("Add Comment")
+
+                    Layout.alignment: Qt.AlignHCenter
+
+                    onClicked: {                       
+                        var commentText = newCommentTextField.text;
+                        
+                        if(newComment.type === "addComment")
+                            root.commentList.append({
+                                username: "@user",
+                                comment: newCommentTextField.text,
+                                time: "Just now",
+                                awner: true,
+                                replyList: []
+                            });
+
+                        if(newComment.type === "updateComment")
+                            root.commentList.get(newComment.commentID).comment = newCommentTextField.text;
+
+                        if(newComment.type === "addReply")
+                            root.commentList.get(newComment.commentID).replyList.append({
+                                username: "@user",
+                                comment: newCommentTextField.text,
+                                time: "Just now",
+                                awner: true
+                            });
+
+                        if(newComment.type === "updateReply")
+                            root.commentList.get(newComment.commentID).replyList.get(newComment.replyID).comment = newCommentTextField.text;
+
+                        newCommentTextField.text = "";
+                        newComment.commentID = "";
+                        newComment.close();
+                    }
+                }
+
+                Button {
+                    id: btnCancel
+                    text: qsTr("Cancel")
+                    flat: true
+
+                    Layout.alignment: Qt.AlignHCenter
+
+                    onClicked: {
+                        newComment.close()
+                    }
+                }
+            }
         }
     }
+
 }

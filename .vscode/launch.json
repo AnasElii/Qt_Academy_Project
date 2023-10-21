@@ -1,31 +1,34 @@
 {
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "C/C++: clang++ build and debug active file",
+            "name": "C++ Debug",
+            "request": "launch",
             "type": "cppdbg",
+            "linux": {
+                "type": "cppdbg"
+            },
             "windows": {
                 "type": "cppvsdbg"
             },
-            "request": "launch",
-            "program": "${command:cmake.launchTargetPath}",
             "cwd": "${workspaceFolder}",
-            "args": [],
-            "stopAtEntry": false,
-            "environment": [],
-            "externalConsole": false,
-            "MIMode": "lldb",
-            "visualizerFile": "/Users/aninoss/Library/Application Support/Code/User/workspaceStorage/3ddbe401100db2572d9fd03342ebe40c/tonka3000.qtvsctools/qt.natvis.xml"
+            "program": "${command:cmake.launchTargetPath}",
+            "args": [
+                // "-qmljsdebugger=host:localhost,port:12150,block,services:DebugMessages,QmlDebugger,V8Debugger"
+            ],
+            "visualizerFile": "c:\\Users\\Aninoss\\AppData\\Roaming\\Code\\User\\workspaceStorage\\04bfb07bf25506a460c0cb18546f471b\\tonka3000.qtvsctools\\qt.natvis.xml"
         },
         {
-            "name": "QML Debug",
             "type": "qml",
             "request": "attach",
+            "name": "Attach to QML Debugger",
             "host": "localhost",
             "port": 12150,
-            "paths": {
-                "qrc:/mainLib/interfaces": "${workspaceFolder}/interfaces"
-            }
+            "paths": [],
+            "trace": false
         }
     ]
 }

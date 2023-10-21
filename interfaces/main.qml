@@ -1,31 +1,31 @@
-import QtQuick 6.5
-import QtQuick.Controls.Material 6.5
-import mainLib 1.0
-import "components"
+import QtQuick
+import QtQuick.Controls
 
 ApplicationWindow {
-    id: mainWindow
-
-    width: 320
-    height: 568
-
-    title: "Reviewed"
+    id: root
+    
+    width: 420
+    height: 650
     visible: true
+    title: qsTr("Hello World")
 
-    property string idP: ""
+    property alias stackView: stackView
+    property alias navBar: navBar
+    property alias myTabBar: myTabBar
+    property alias commentList: commentList
 
     ListModel {
-        id: commentModel
+        id: commentList
     }
 
-    StackView {
+    header: NavBar { id: navBar }
+
+    StackView{
         id: stackView
-        anchors.fill: parent
-
-        initialItem: CanvasPage {
-            id: page
-
-            anchors.fill: parent
-        }
+        width: parent.width
+        height: parent.height
+        initialItem: "CanvasPage.qml"
     }
+
+    footer: MyTabBar{ id: myTabBar; visible: false }
 }
