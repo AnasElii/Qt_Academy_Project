@@ -9,7 +9,7 @@ set(CMAKE_PREFIX_PATH $ENV{QTMSVCDIR})
 # ========= Set directories
 set(SOURCE_DIR "${CMAKE_SOURCE_DIR}/src")
 set(INCLUDE_DIR "${CMAKE_SOURCE_DIR}/include")
-set(ANDROID_J_DIR "${CMAKE_SOURCE_DIR}/android/src/org/qtproject/example/QGuiApp/")
+#set(ANDROID_J_DIR "${CMAKE_SOURCE_DIR}/android/src/org/qtproject/example/QGuiApp/")
 
 # ========= Include directories
 include_directories(${SOURCE_DIR})
@@ -20,7 +20,7 @@ include_directories(${ANDROID_J_DIR})
 file(GLOB_RECURSE SOURCES
     "${SOURCE_DIR}/*.cpp"
     "${INCLUDE_DIR}/*.h"
-    "${ANDROID_J_DIR}/*.java"
+#    "${ANDROID_J_DIR}/*.java"
 )
 
 # ========= Include libraries
@@ -43,6 +43,9 @@ qt_add_qml_module(${CMAKE_PROJECT_NAME}
     interfaces/ReplyCumponent.qml
     interfaces/MyTabBar.qml
     interfaces/NavBar.qml
+
+    # Debug
+    # interfaces/ZoomTest.qml
     RESOURCES
 )
 
@@ -85,10 +88,12 @@ qt_add_resources(${CMAKE_PROJECT_NAME} "${CMAKE_PROJECT_NAME}"
     resources/images/add@2x.png
     resources/images/add@3x.png
     
+    #App images
     resources/images/Bitmap.png
     resources/images/Pic_Circle.png
     resources/images/71z05dWWLHL.jpg
 
+    #App icons
     resources/icons/delete.png
     resources/icons/delete@2x.png
     resources/icons/delete@3x.png
@@ -109,15 +114,15 @@ endif()
 # ========= Configure Android package
 if(ANDROID)
 
-    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
-    set_property(TARGET ${CMAKE_PROJECT_NAME} PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR ${ANDROID_PACKAGE_SOURCE_DIR})
-    add_custom_target(cmake_android_package
-        SOURCES
-        ${ANDROID_PACKAGE_SOURCE_DIR}/AndroidManifest.xml
-        ${ANDROID_PACKAGE_SOURCE_DIR}/build.gradle
-        ${ANDROID_PACKAGE_SOURCE_DIR}/grable.properties
-        ${ANDROID_PACKAGE_SOURCE_DIR}/res/values/libs.xml
-    )
+#    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
+#    set_property(TARGET ${CMAKE_PROJECT_NAME} PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR ${ANDROID_PACKAGE_SOURCE_DIR})
+#    add_custom_target(cmake_android_package
+#        SOURCES
+#        ${ANDROID_PACKAGE_SOURCE_DIR}/AndroidManifest.xml
+#        ${ANDROID_PACKAGE_SOURCE_DIR}/build.gradle
+#        ${ANDROID_PACKAGE_SOURCE_DIR}/grable.properties
+#        ${ANDROID_PACKAGE_SOURCE_DIR}/res/values/libs.xml
+#    )
 
     # ========= Include openssl
     include(FetchContent)
@@ -136,7 +141,7 @@ endif()
 # ========= Link target subDirectories
 target_link_directories(${CMAKE_PROJECT_NAME} PUBLIC src)
 target_link_directories(${CMAKE_PROJECT_NAME} PUBLIC include)
-target_link_directories(${CMAKE_PROJECT_NAME} PUBLIC android/src/org/qtproject/example/QGuiApp)
+#target_link_directories(${CMAKE_PROJECT_NAME} PUBLIC android/src/org/qtproject/example/QGuiApp)
 
 # ========= Link libraries
 target_link_libraries(${CMAKE_PROJECT_NAME}
