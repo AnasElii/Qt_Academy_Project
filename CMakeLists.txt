@@ -39,11 +39,14 @@ qt_add_qml_module(${CMAKE_PROJECT_NAME}
     interfaces/main.qml
     interfaces/LoginPage.qml
     interfaces/CanvasPage.qml
+    
+    # Components
     interfaces/CommentCumponent.qml
     interfaces/ReplyCumponent.qml
     interfaces/MyTabBar.qml
     interfaces/NavBar.qml
-
+    interfaces/MyPin.qml
+    
     # Debug
     # interfaces/ZoomTest.qml
     RESOURCES
@@ -103,6 +106,9 @@ qt_add_resources(${CMAKE_PROJECT_NAME} "${CMAKE_PROJECT_NAME}"
     resources/icons/reply.png
     resources/icons/reply@2x.png
     resources/icons/reply@3x.png
+    resources/icons/pin.png
+    resources/icons/pin@2x.png
+    resources/icons/pin@3x.png
 )
 
 # ========= Cnfigure macOS package

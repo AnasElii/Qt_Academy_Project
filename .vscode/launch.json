@@ -16,10 +16,8 @@
             },
             "cwd": "${workspaceFolder}",
             "program": "${command:cmake.launchTargetPath}",
-            "args": [
-                // "-qmljsdebugger=host:localhost,port:12150,block,services:DebugMessages,QmlDebugger,V8Debugger"
-            ],
-            "visualizerFile": "c:\\Users\\Aninoss\\AppData\\Roaming\\Code\\User\\workspaceStorage\\04bfb07bf25506a460c0cb18546f471b\\tonka3000.qtvsctools\\qt.natvis.xml"
+            "args": [],
+            "visualizerFile": "c:\\Users\\Aninoss\\AppData\\Roaming\\Code\\User\\workspaceStorage\\cff3b04d580d37b5c1713f9edc5f4e61\\tonka3000.qtvsctools\\qt.natvis.xml"
         },
         {
             "type": "qml",

@@ -12,7 +12,8 @@
         "qnetworkrequest": "cpp",
         "qurlquery": "cpp",
         "qjsonarray": "cpp",
-        "qscopedpointer": "cpp"
+        "qscopedpointer": "cpp",
+        "qqmlapplicationengine": "cpp"
     },
     "cmake.configureArgs": [
         "-Wno-dev"
