@@ -6,9 +6,13 @@ Page{
     id: canvasPage
 
     title: qsTr("Canvas Page")
-    property list<MyPin> pinList: []
 
     property alias newComment: newComment
+    property alias canvasMouseArea: canvasMouseArea
+
+    ListModel{
+        id: pinList
+    }
 
     Component.onCompleted:{
         root.navBar.visible= true;
@@ -16,6 +20,7 @@ Page{
         root.navBar.sheet = sheet;
         root.navBar.rcBackground = rcBackground;
         root.navBar.popup= newComment;
+        root.navBar.canvasMouseArea = canvasPage.canvasMouseArea;
     }
 
     Rectangle {
@@ -61,16 +66,49 @@ Page{
                             imageScale.xScale -= (1 - pinch.scale)  * zoomFactor;
                             imageScale.yScale -= (1 - pinch.scale)  * zoomFactor;
                         }
+                    }
 
-                        // Update pin positions
-                        for (var i = 0; i < canvasPage.pinList.length; i++) {
-                            // Calculate the new position based on the image scaling and translation
-                            console.log("Update Pin Position id: " + canvasPage.pinList[i].pinId + " | " + canvasPage.pinList[i].x + " | " + canvasPage.pinList[i].y)
-                            var newPinX = canvasPage.pinList[i].x * imageScale.xScale + flickable.contentX;
-                            var newPinY = canvasPage.pinList[i].y * imageScale.yScale + flickable.contentY;
-                            canvasPage.pinList[i].x = newPinX;
-                            canvasPage.pinList[i].y = newPinY;
-                        }
+                    // onPinchFinished: {
+                    //     // Update pin positions
+                    //     for (var i = 0; i < canvasPage.pinList.length; i++) {
+                    //         // Calculate the new position based on the image scaling and translation
+                    //         console.log("Update Pin Position id: " + canvasPage.pinList[i].pinId + " | " + canvasPage.pinList[i].x + " | " + canvasPage.pinList[i].y)
+                    //         var newPinX = canvasPage.pinList[i].x * imageScale.xScale + flickable.contentX;
+                    //         var newPinY = canvasPage.pinList[i].y * imageScale.yScale + flickable.contentY;
+                    //         canvasPage.pinList[i].x = newPinX;
+                    //         canvasPage.pinList[i].y = newPinY;
+                    //     }
+                    // }
+                }
+            }
+
+            Rectangle{
+                id: rcPins
+
+                implicitWidth: parent.width
+                implicitHeight: parent.height
+
+                color: "transparent"
+
+                onWidthChanged: {
+                    console.log("rcPins width: " + rcPins.width)
+                    console.log("rcPins height: " + rcPins.height)
+                }
+
+                Repeater{
+                    model: canvasPage.pinList
+
+                    delegate: MyPin{
+                        
+                        pinId: model.pinId
+                        x: model.x
+                        y: model.y
+                        visible: model.visible
+
+                    }
+
+                    onItemAdded: {
+                        console.log("New Item Added: " + model.pinId + " | " + model.x + " | " + model.y + " | " + model.visible);
                     }
                 }
 
@@ -78,59 +116,34 @@ Page{
                 MouseArea {
                     id: canvasMouseArea
 
-                    z: 1
                     visible: true
                     anchors.fill: parent
 
                     onClicked: {
-                        // Creat Pin
-                        var pin = Qt.createComponent('MyPin.qml').createObject(root, {
-                                "pinId": canvasPage.pinList.length,
-                                "x": mouse.x,
-                                "y": mouse.y
+                        
+                        root.commentList.append({
+                                username: "@user",
+                                comment: newCommentTextField.text,
+                                time: "Just now",
+                                awner: true,
+                                replyList: []
                             });
 
-                        canvasPage.pinList.push(pin);
-                        console.log(pin.pinId, " | ", pin.x, " | ", pin.y, " | ", pin.visible);
-                        canvasMouseArea.visible = false;
+                        // Creat Pin
+                        pinList.append({
+                            "pinId": canvasPage.pinList.length,
+                            "x": mouse.x,
+                            "y": mouse.y,
+                            "visible": true
+                        });
+
+                        // Add Pin To Pin List
+                        // canvasPage.pinList.push(newPin);
+                        console.log(newPin.pinId, " | ", newPin.x, " | ", newPin.y, " | ", newPin.visible);
+                        // canvasMouseArea.visible = false;
                     }
                 }
             }
-        }
-    }
-
-    // Add Pin Button
-    Rectangle {
-        id: addPinButton
-
-        width: 50
-        height: 50
-        anchors {
-            right: parent.right
-            bottom: parent.bottom
-            margins: 20
-        }
-        radius: 25
-        opacity: 0.6
-
-        MouseArea {
-            anchors.fill: parent
-
-            onClicked: {
-                // if (isComment == false) {
-                    canvasMouseArea.visible = true;
-                    // isComment = true;
-                // }
-            }
-        }
-
-        Image {
-            id: addPinIcon
-
-            width: parent.width
-            source: "qrc:/resources/icons/pin.png"
-            fillMode: Image.PreserveAspectFit
-            smooth: true
         }
     }
 
@@ -164,16 +177,6 @@ Page{
             onClicked: {
                 imageScale.xScale += 0.1;
                 imageScale.yScale += 0.1;
-
-                // Update pin positions
-                for (var i = 0; i < canvasPage.pinList.length; i++) {
-                    // Calculate the new position based on the image scaling and translation
-                    console.log("Update Pin Position id: " + canvasPage.pinList[i].pinId + " | " + canvasPage.pinList[i].x + " | " + canvasPage.pinList[i].y)
-                    var newPinX = canvasPage.pinList[i].x * imageScale.xScale + flickable.contentX;
-                    var newPinY = canvasPage.pinList[i].y * imageScale.yScale + flickable.contentY;
-                    canvasPage.pinList[i].x = newPinX;
-                    canvasPage.pinList[i].y = newPinY;
-                }
             }
         }
 
@@ -185,16 +188,6 @@ Page{
             onClicked: {
                 imageScale.xScale -= 0.1;
                 imageScale.yScale -= 0.1;
-
-                // Update pin positions
-                for (var i = 0; i < canvasPage.pinList.length; i++) {
-                    // Calculate the new position based on the image scaling and translation
-                    console.log("Update Pin Position id: " + canvasPage.pinList[i].pinId + " | " + canvasPage.pinList[i].x + " | " + canvasPage.pinList[i].y)
-                    var newPinX = canvasPage.pinList[i].x * imageScale.xScale + flickable.contentX;
-                    var newPinY = canvasPage.pinList[i].y * imageScale.yScale + flickable.contentY;
-                    canvasPage.pinList[i].x = newPinX;
-                    canvasPage.pinList[i].y = newPinY;
-                }
             }
         }
     }

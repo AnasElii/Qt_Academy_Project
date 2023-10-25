@@ -12,6 +12,7 @@ ToolBar {
     property Rectangle sheet
     property Popup popup
     property Rectangle rcBackground
+    property MouseArea canvasMouseArea
     property var previousPage: stackView.get(parent.StackView.index - 1)
 
     property alias addNewButton : addNewButton
@@ -49,8 +50,9 @@ ToolBar {
             icon.source: "qrc:/resources/images/add.png"
             visible: true
             onClicked: {
-                root.stackView.currentItem.newComment.type = "addComment";
-                popup.open()
+                // toolBar.canvasMouseArea.visible = true;
+                // root.stackView.currentItem.newComment.type = "addComment";
+                // popup.open()
             }
         } 
 
@@ -64,10 +66,10 @@ ToolBar {
             onClicked: {
                 if (toolBar.sheet.state === "hidden") {
                     toolBar.sheet.state = "visible";
-                    rcBackground.visible = true;
+                    toolBar.rcBackground.visible = true;
                 } else {
                     toolBar.sheet.state = "hidden";
-                    rcBackground.visible = false;
+                    toolBar.rcBackground.visible = false;
                 }
             }
         }
