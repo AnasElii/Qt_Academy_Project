@@ -54,29 +54,6 @@ Page{
                     xScale: 1
                     yScale: 1
                 }
-
-                PinchArea {
-                    anchors.fill: parent
-                    property real zoomFactor: 0.05 // Adjust this value to control the zoom speed
-
-                    onPinchUpdated: {
-                        if (pinch.scale > 1) {
-                            imageScale.xScale += (pinch.scale - 1) * zoomFactor;
-                            imageScale.yScale += (pinch.scale - 1)  * zoomFactor;
-                        } else if (pinch.scale < 1) {
-                            imageScale.xScale -= (1 - pinch.scale)  * zoomFactor;
-                            imageScale.yScale -= (1 - pinch.scale)  * zoomFactor;
-                        }
-                    }
-
-                    onPinchFinished: {
-                        // Update pin positions based on new scaling
-                        for (var i = 0; i < canvasPage.pinList.length; i++) {
-                            canvasPage.pinList.get(i).x *= imageScale.xScale;
-                            canvasPage.pinList.get(i).y *= imageScale.yScale;
-                        }
-                    }
-                }
             }
 
 
@@ -113,6 +90,7 @@ Page{
         }
     }
 
+    // Button Reset
     Button{
         id: zoomReset
 
@@ -129,6 +107,7 @@ Page{
         }
     }
 
+    // Button Zoom In And Zoom Out
     RowLayout{
         anchors.right: parent.right
         anchors.bottom: rcImage.bottom
