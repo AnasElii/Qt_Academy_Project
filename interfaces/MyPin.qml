@@ -43,6 +43,8 @@ Item {
 
             // sourceSize: Qt.size(parent.width, parent.height)
             source: "qrc:/resources/icons/pin.png"
+            x:0
+            y: -image.height
             fillMode: Image.PreserveAspectFit
             smooth: true
             clip: true

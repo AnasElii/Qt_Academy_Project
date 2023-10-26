@@ -38,8 +38,8 @@ Page{
             width: parent.width
             height: parent.height
 
-            contentWidth: image.width * imageScale.xScale
-            contentHeight: image.height * imageScale.yScale
+            contentWidth: image.width
+            contentHeight: image.height
 
 
             Image {
@@ -66,7 +66,7 @@ Page{
             MouseArea {
                 id: canvasMouseArea
 
-                visible: true
+                visible: false
                 anchors.fill: parent
 
                 onClicked: function(event){
@@ -74,10 +74,13 @@ Page{
                     // Creat Pin
                     canvasPage.pinList.append({
                         pinId: canvasPage.pinList.count,
-                        x: (event.x - flickable.contentX) / imageScale.xScale,
-                        y: (event.y - flickable.contentY) / imageScale.yScale,
-                        visible: false
+                        x: (event.x - flickable.contentX),
+                        y: (event.y - flickable.contentY),
+                        visible: true
                     });
+                    canvasPage.newComment.type = "addComment";
+                    canvasPage.newComment.open()
+                    visible= false;
                 }
             }
 
