@@ -13,9 +13,14 @@ ApplicationWindow {
     property alias navBar: navBar
     property alias myTabBar: myTabBar
     property alias commentList: commentList
+    property alias pinList: pinList
 
     ListModel {
         id: commentList
+    }
+
+    ListModel{
+        id: pinList
     }
 
     header: NavBar { id: navBar }

@@ -51,6 +51,16 @@ ToolBar {
             visible: true
             onClicked: {
                 toolBar.canvasMouseArea.visible = true;
+                // root.commentList.append({
+                //     commentID: root.commentList.count,
+                //     pin: root.pinList.count,
+                //     username: "",
+                //     comment: "",
+                //     time: "",
+                //     awner: true,
+                //     visible: false,
+                //     replyList: []
+                // });
                 // root.stackView.currentItem.newComment.type = "addComment";
                 // popup.open()
             }

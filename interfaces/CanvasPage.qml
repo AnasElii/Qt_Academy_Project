@@ -7,11 +7,25 @@ Page{
 
     title: qsTr("Canvas Page")
 
+    property var pin: []
     property alias newComment: newComment
-    property alias pinList: pinList
 
-    ListModel{
-        id: pinList
+    function deleteComment(){
+        root.pinList.clear();
+
+        for(var k = 0; k < root.commentList.count; k++){
+            console.log("Inside The Loop " + k);
+
+            var pinNewObject = root.commentList.get(k).pin.get(0);
+            root.pinList.insert(k,
+                {
+                    pinID: pinNewObject.pinID,
+                    x: pinNewObject.x,
+                    y: pinNewObject.y,
+                    visible: pinNewObject.visible
+                }
+            );
+        }
     }
 
     Component.onCompleted:{
@@ -52,10 +66,10 @@ Page{
 
 
             Repeater{
-                model: pinList
+                model: root.pinList
 
                 delegate: MyPin{
-                    pinId: model.pinId
+                    pinID: model.pinID
                     x: model.x
                     y: model.y
                     visible: model.visible
@@ -69,15 +83,26 @@ Page{
                 visible: false
                 anchors.fill: parent
 
-                onClicked: function(event){
-                    console.log("On Clicked")
+                onClicked: function(event){                    
                     // Creat Pin
-                    canvasPage.pinList.append({
-                        pinId: canvasPage.pinList.count,
+                    canvasPage.pin = {
+                        pinID: root.commentList.count,
                         x: (event.x - flickable.contentX),
                         y: (event.y - flickable.contentY),
                         visible: true
-                    });
+                    };
+
+                
+                    root.pinList.append(canvasPage.pin);
+
+                    // var pinObject = root.pinList.get(root.pinList.count - 1);
+                    // for(var i = 0; i < root.commentList.count; i++){
+                    //     if(root.commentList.get(i).pin === pinObject.pinID){
+                    //         root.commentList.get(i).pin = pinObject;
+                    //         break;
+                    //     }
+                    // }
+
                     canvasPage.newComment.type = "addComment";
                     canvasPage.newComment.open()
                     visible= false;
@@ -171,11 +196,13 @@ Page{
                         delegate: CommentCumponent {
                             Layout.fillWidth: true
                             
-                            commentID: model.index
+                            commentID: model.commentID
+                            commentIndex: model.index
                             usernameText: model.username
                             commentText: model.comment
                             timeText: model.time
                             awner: model.awner
+                            visible: model.visible
                             replyList: model.replyList
 
                             Text{
@@ -268,14 +295,46 @@ Page{
                     onClicked: {                       
                         var commentText = newCommentTextField.text;
                         
-                        if(newComment.type === "addComment")
+                        if(newComment.type === "addComment" && commentText !== ""){
                             root.commentList.append({
+                                commentID: root.commentList.count,
                                 username: "@user",
-                                comment: newCommentTextField.text,
+                                comment: commentText,
                                 time: "Just now",
                                 awner: true,
-                                replyList: []
+                                visible: true,
+                                replyList: [],
+                                pin: [
+                                    {}
+                                ]
                             });
+
+                            root.commentList.get(newComment.commentID).pin.set(0, {
+                                pinID: canvasPage.pin.pinID,
+                                x: canvasPage.pin.x,
+                                y: canvasPage.pin.y,
+                                visible: canvasPage.pin.visible
+                            });
+
+                            if(root.pinList.count > 0)
+                                root.pinList.clear();
+                            
+                            for(var k = 0; k < root.commentList.count; k++){
+                                console.log("Inside The Loop " + k);
+
+                                var pinNewObject = root.commentList.get(k).pin.get(0);
+                                root.pinList.append(
+                                    {
+                                        pinID: pinNewObject.pinID,
+                                        x: pinNewObject.x,
+                                        y: pinNewObject.y,
+                                        visible: pinNewObject.visible
+                                    }
+                                );
+                            }
+
+                            console.log("Pin List Length " + root.pinList.count);
+                        }
 
                         if(newComment.type === "updateComment")
                             root.commentList.get(newComment.commentID).comment = newCommentTextField.text;

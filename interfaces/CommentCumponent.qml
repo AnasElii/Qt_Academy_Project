@@ -9,7 +9,9 @@ Item{
     width: parent.width
     implicitHeight: glContent.height
     
-    property int commentID: 0
+    property string commentID
+    property string pinID
+    property int commentIndex: 0
     property alias usernameText: username.text
     property url imageSource: profilePic.source
     property alias timeText: time.text
@@ -106,7 +108,7 @@ Item{
                         text: "edit"
                         onClicked: {
                             canvasPage.newComment.type = "updateComment";
-                            canvasPage.newComment.commentID = commentCard.commentID;
+                            canvasPage.newComment.commentID = commentCard.commentIndex;
                             canvasPage.newComment.newCommentTextField.text = commentCard.commentText;
                             canvasPage.newComment.open();
                         }
@@ -117,7 +119,11 @@ Item{
                         icon.source: "qrc:/resources/icons/delete.png"
                         visible: true
                         text: "delete"
-                        onClicked: root.commentList.remove(commentCard.commentID);
+                        onClicked:{
+                            root.commentList.get(commentCard.commentIndex).pin.remove(commentCard.commentIndex, 1);
+                            deleteComment();
+                            root.commentList.remove(commentCard.commentIndex, 1);
+                        }
                     }
                 }
 

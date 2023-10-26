@@ -7,7 +7,8 @@ Item {
     width: 30
     height: 30
 
-    property string pinId
+    property string pinID
+    property string commentID
 
     // Declare the custom signal
     signal pinPressAndHeld(string pinId)
