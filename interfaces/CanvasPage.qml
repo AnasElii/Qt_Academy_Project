@@ -8,7 +8,6 @@ Page{
     title: qsTr("Canvas Page")
 
     property alias newComment: newComment
-//    property alias canvasMouseArea: canvasMouseArea
     property alias pinList: pinList
 
     ListModel{
@@ -49,11 +48,6 @@ Page{
                 source: "qrc:/resources/images/Bitmap.png"
                 
                 fillMode: Image.PreserveAspectFit
-                transform: Scale {
-                    id: imageScale
-                    xScale: 1
-                    yScale: 1
-                }
             }
 
 
@@ -87,53 +81,6 @@ Page{
                 }
             }
 
-        }
-    }
-
-    // Button Reset
-    Button{
-        id: zoomReset
-
-        anchors.left: parent.left
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: 10
-        anchors.leftMargin: 10
-        text: "Reset"
-
-        onClicked: {
-            imageScale.xScale = 1;
-            imageScale.yScale = 1;
-            canvasPage.pinList.clear();
-        }
-    }
-
-    // Button Zoom In And Zoom Out
-    RowLayout{
-        anchors.right: parent.right
-        anchors.bottom: rcImage.bottom
-        anchors.bottomMargin: 10
-        anchors.rightMargin: 10
-
-        Button{
-            id: zoomIn
-
-            text: "+"
-
-            onClicked: {
-                imageScale.xScale += 0.1;
-                imageScale.yScale += 0.1;
-            }
-        }
-
-        Button{
-            id: zoomOut
-
-            text: "-"
-
-            onClicked: {
-                imageScale.xScale -= 0.1;
-                imageScale.yScale -= 0.1;
-            }
         }
     }
 
