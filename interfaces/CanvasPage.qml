@@ -8,7 +8,8 @@ Page{
     title: qsTr("Canvas Page")
 
     property alias newComment: newComment
-    property alias canvasMouseArea: canvasMouseArea
+//    property alias canvasMouseArea: canvasMouseArea
+    property alias pinList: pinList
 
     ListModel{
         id: pinList
@@ -20,7 +21,7 @@ Page{
         root.navBar.sheet = sheet;
         root.navBar.rcBackground = rcBackground;
         root.navBar.popup= newComment;
-        root.navBar.canvasMouseArea = canvasPage.canvasMouseArea;
+        root.navBar.canvasMouseArea = canvasMouseArea;
     }
 
     Rectangle {
@@ -68,82 +69,47 @@ Page{
                         }
                     }
 
-                    // onPinchFinished: {
-                    //     // Update pin positions
-                    //     for (var i = 0; i < canvasPage.pinList.length; i++) {
-                    //         // Calculate the new position based on the image scaling and translation
-                    //         console.log("Update Pin Position id: " + canvasPage.pinList[i].pinId + " | " + canvasPage.pinList[i].x + " | " + canvasPage.pinList[i].y)
-                    //         var newPinX = canvasPage.pinList[i].x * imageScale.xScale + flickable.contentX;
-                    //         var newPinY = canvasPage.pinList[i].y * imageScale.yScale + flickable.contentY;
-                    //         canvasPage.pinList[i].x = newPinX;
-                    //         canvasPage.pinList[i].y = newPinY;
-                    //     }
-                    // }
-                }
-            }
-
-            Rectangle{
-                id: rcPins
-
-                implicitWidth: parent.width
-                implicitHeight: parent.height
-
-                color: "transparent"
-
-                onWidthChanged: {
-                    console.log("rcPins width: " + rcPins.width)
-                    console.log("rcPins height: " + rcPins.height)
-                }
-
-                Repeater{
-                    model: canvasPage.pinList
-
-                    delegate: MyPin{
-                        
-                        pinId: model.pinId
-                        x: model.x
-                        y: model.y
-                        visible: model.visible
-
-                    }
-
-                    onItemAdded: {
-                        console.log("New Item Added: " + model.pinId + " | " + model.x + " | " + model.y + " | " + model.visible);
-                    }
-                }
-
-                // Mouse Area To Add Pin On Click Event
-                MouseArea {
-                    id: canvasMouseArea
-
-                    visible: true
-                    anchors.fill: parent
-
-                    onClicked: {
-                        
-                        root.commentList.append({
-                                username: "@user",
-                                comment: newCommentTextField.text,
-                                time: "Just now",
-                                awner: true,
-                                replyList: []
-                            });
-
-                        // Creat Pin
-                        pinList.append({
-                            "pinId": canvasPage.pinList.length,
-                            "x": mouse.x,
-                            "y": mouse.y,
-                            "visible": true
-                        });
-
-                        // Add Pin To Pin List
-                        // canvasPage.pinList.push(newPin);
-                        console.log(newPin.pinId, " | ", newPin.x, " | ", newPin.y, " | ", newPin.visible);
-                        // canvasMouseArea.visible = false;
+                    onPinchFinished: {
+                        // Update pin positions based on new scaling
+                        for (var i = 0; i < canvasPage.pinList.length; i++) {
+                            canvasPage.pinList.get(i).x *= imageScale.xScale;
+                            canvasPage.pinList.get(i).y *= imageScale.yScale;
+                        }
                     }
                 }
             }
+
+
+            Repeater{
+                model: pinList
+
+                delegate: MyPin{
+                    pinId: model.pinId
+                    x: model.x
+                    y: model.y
+                    visible: model.visible
+                }
+            }
+
+            // Mouse Area To Add Pin On Click Event
+            MouseArea {
+                id: canvasMouseArea
+
+                visible: true
+                anchors.fill: parent
+
+                onClicked: function(event){
+                    console.log("On Clicked")
+                    // Creat Pin
+                    canvasPage.pinList.append({
+                        pinId: canvasPage.pinList.count,
+                        x: (event.x - flickable.contentX) / imageScale.xScale,
+                        y: (event.y - flickable.contentY) / imageScale.yScale,
+                        visible: false
+                    });
+                }
+            }
+
         }
     }
 
@@ -159,7 +125,7 @@ Page{
         onClicked: {
             imageScale.xScale = 1;
             imageScale.yScale = 1;
-            canvaspage.pinList = [];
+            canvasPage.pinList.clear();
         }
     }
 

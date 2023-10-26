@@ -50,7 +50,7 @@ ToolBar {
             icon.source: "qrc:/resources/images/add.png"
             visible: true
             onClicked: {
-                // toolBar.canvasMouseArea.visible = true;
+                toolBar.canvasMouseArea.visible = true;
                 // root.stackView.currentItem.newComment.type = "addComment";
                 // popup.open()
             }
