@@ -10,7 +10,6 @@ Item{
     implicitHeight: glContent.height
     
     property string commentID
-    property string pinID
     property int commentIndex: 0
     property alias usernameText: username.text
     property url imageSource: profilePic.source
@@ -120,8 +119,8 @@ Item{
                         visible: true
                         text: "delete"
                         onClicked:{
-                            root.commentList.get(commentCard.commentIndex).pin.remove(commentCard.commentIndex, 1);
-                            deleteComment();
+                            root.commentList.get(commentCard.commentIndex).pin.get(0).visible = false;
+                            displayPins();
                             root.commentList.remove(commentCard.commentIndex, 1);
                         }
                     }

@@ -10,7 +10,7 @@ Page{
     property var pin: []
     property alias newComment: newComment
 
-    function deleteComment(){
+    function displayPins(){
         root.pinList.clear();
 
         for(var k = 0; k < root.commentList.count; k++){
@@ -94,15 +94,6 @@ Page{
 
                 
                     root.pinList.append(canvasPage.pin);
-
-                    // var pinObject = root.pinList.get(root.pinList.count - 1);
-                    // for(var i = 0; i < root.commentList.count; i++){
-                    //     if(root.commentList.get(i).pin === pinObject.pinID){
-                    //         root.commentList.get(i).pin = pinObject;
-                    //         break;
-                    //     }
-                    // }
-
                     canvasPage.newComment.type = "addComment";
                     canvasPage.newComment.open()
                     visible= false;
@@ -209,6 +200,10 @@ Page{
                                 text: model.index + " " + commentID
                             }
                         }
+
+                        onItemRemoved: {
+                            console.log("Item Deleted");
+                        }
                     }
                 }
 
@@ -292,7 +287,10 @@ Page{
 
                     Layout.alignment: Qt.AlignHCenter
 
-                    onClicked: {                       
+                    onClicked: {       
+                        if(root.pinList.count > 0)
+                                root.pinList.clear();
+                                                
                         var commentText = newCommentTextField.text;
                         
                         if(newComment.type === "addComment" && commentText !== ""){
@@ -304,40 +302,23 @@ Page{
                                 awner: true,
                                 visible: true,
                                 replyList: [],
-                                pin: [
-                                    {}
-                                ]
+                                pin: [{}]
                             });
 
-                            root.commentList.get(newComment.commentID).pin.set(0, {
+                            root.commentList.get(root.commentList.count - 1).pin.set(0, {
                                 pinID: canvasPage.pin.pinID,
                                 x: canvasPage.pin.x,
                                 y: canvasPage.pin.y,
                                 visible: canvasPage.pin.visible
                             });
 
-                            if(root.pinList.count > 0)
-                                root.pinList.clear();
-                            
-                            for(var k = 0; k < root.commentList.count; k++){
-                                console.log("Inside The Loop " + k);
-
-                                var pinNewObject = root.commentList.get(k).pin.get(0);
-                                root.pinList.append(
-                                    {
-                                        pinID: pinNewObject.pinID,
-                                        x: pinNewObject.x,
-                                        y: pinNewObject.y,
-                                        visible: pinNewObject.visible
-                                    }
-                                );
-                            }
-
-                            console.log("Pin List Length " + root.pinList.count);
+                            displayPins();
                         }
 
-                        if(newComment.type === "updateComment")
+                        if(newComment.type === "updateComment"){
                             root.commentList.get(newComment.commentID).comment = newCommentTextField.text;
+                            displayPins();
+                        }
 
                         if(newComment.type === "addReply")
                             root.commentList.get(newComment.commentID).replyList.append({
