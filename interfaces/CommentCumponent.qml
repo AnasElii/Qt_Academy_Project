@@ -120,7 +120,9 @@ Item{
                         text: "delete"
                         onClicked:{
                             root.commentList.get(commentCard.commentIndex).pin.get(0).visible = false;
+                            root.commentList.get(commentCard.commentIndex).visible = false;
                             displayPins();
+                            deleteComment();
                             root.commentList.remove(commentCard.commentIndex, 1);
                         }
                     }
@@ -145,7 +147,7 @@ Item{
                     text: "Reply"
                     onClicked: {
                         canvasPage.newComment.type = "addReply";
-                        canvasPage.newComment.commentID = commentCard.commentID;
+                        canvasPage.newComment.commentID = commentCard.commentIndex;
                         canvasPage.newComment.open();
                     }
                 }

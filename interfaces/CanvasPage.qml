@@ -10,6 +10,34 @@ Page{
     property var pin: []
     property alias newComment: newComment
 
+    function deleteComment(){
+        var newCommentList;
+
+        if(root.commentList.count > 0){
+
+            for(var i = 0; i < root.commentList.count; i++){
+            var commentObject = root.commentList.get(i);
+
+            if(commentObject.visible){
+                    newComment.push({
+                        commentID: commentObject.commentID,
+                        username: commentObject.username,
+                        comment: commentObject.comment,
+                        time: commentObject.time,
+                        awner: commentObject.awner,
+                        visible: commentObject.visible,
+                        pin: commentObject.pin,
+                        replyList: commentObject.replyList
+                });        
+            } 
+            }
+
+            root.commentList.clear();
+            root.commentList= newCommentList;
+            
+        }
+    }
+
     function displayPins(){
         root.pinList.clear();
 
@@ -301,8 +329,8 @@ Page{
                                 time: "Just now",
                                 awner: true,
                                 visible: true,
-                                replyList: [],
-                                pin: [{}]
+                                pin: [{}],
+                                replyList: []
                             });
 
                             root.commentList.get(root.commentList.count - 1).pin.set(0, {
