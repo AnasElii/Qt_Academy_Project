@@ -49,8 +49,8 @@ Page{
                 Layout.fillWidth: true
 
                 Keys.onReturnPressed: {
-                    if(createProjectButton.enabled)
-                        focus: true
+                    btnLogin.clicked()
+
                 }
             }
 
@@ -67,7 +67,7 @@ Page{
             Layout.rightMargin: 10
 
             Keys.onReturnPressed: {
-                console.log("Login");
+                // btnLogin.clicked()
             }
         }
 
@@ -85,7 +85,8 @@ Page{
                     return;
 
                 root.username = tfRoomID.text;
-                root.stackView.replace("CanvasPage.qml");
+                root.userColor = root.randomColor();
+                root.stackView.push("CanvasPage.qml");
             }
         }
     }

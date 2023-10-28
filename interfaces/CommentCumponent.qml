@@ -17,6 +17,10 @@ Item{
     property alias commentText: comment.text
     property bool awner : false
     property ListModel replyList : replyList
+    
+    function getAlpha() {
+        return root.username.substring(0, 1).toUpperCase();
+    }
 
     ListModel{
         id: replyList
@@ -33,9 +37,10 @@ Item{
         Rectangle{
             id: profileImage
 
-            color: "transparent"
+            color: root.userColor
             width: 50
             height: 50
+            radius: width/2
 
             Image {
                 id: profilePic
@@ -43,6 +48,7 @@ Item{
                 width: parent.width
                 source: "qrc:/resources/images/Bitmap.png"
                 fillMode: Image.PreserveAspectFit
+                visible: false
 
                 // Profile Image Mask
                 layer.enabled: true
@@ -54,6 +60,20 @@ Item{
                         fillMode: Image.PreserveAspectFit
                     }
                 }
+            }
+
+            Text{
+                id: profileText
+
+                visible: true
+                text: getAlpha()
+                font{
+                    family: "Texta"
+                    styleName: "Bold"
+                    pixelSize: 20
+                }
+                color: "white"
+                anchors.centerIn: parent
             }
         }
 

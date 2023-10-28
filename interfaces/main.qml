@@ -12,6 +12,7 @@ ApplicationWindow {
     // User Info
     property string username: ""
     property string email: ""
+    property string userColor: randomColor()
 
     // Alias
     property alias stackView: stackView
@@ -19,6 +20,16 @@ ApplicationWindow {
     property alias myTabBar: myTabBar
     property alias commentList: commentList
     property alias pinList: pinList
+
+    // js Funstion to randomaize color
+    function randomColor() {
+        var letters = '0123456789ABCDEF';
+        var color = '#';
+        for (var i = 0; i < 6; i++){
+            color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
+    }
 
     ListModel {
         id: commentList

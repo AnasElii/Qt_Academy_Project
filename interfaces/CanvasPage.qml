@@ -56,6 +56,10 @@ Page{
         }
     }
 
+    function getUserName() {
+        return root.username.toLowerCase();
+    }
+
     Component.onCompleted:{
         root.navBar.visible= true;
         root.navBar.flickable = flickable
@@ -87,7 +91,8 @@ Page{
             Image {
                 id: image
 
-                source: "qrc:/resources/images/Bitmap.png"
+                // source: "qrc:/resources/images/Bitmap.png"
+                source: "https://picsum.photos/500/700"
                 
                 fillMode: Image.PreserveAspectFit
             }
@@ -223,10 +228,6 @@ Page{
                             awner: model.awner
                             visible: model.visible
                             replyList: model.replyList
-
-                            Text{
-                                text: model.index + " " + commentID
-                            }
                         }
 
                         onItemRemoved: {
@@ -324,7 +325,7 @@ Page{
                         if(newComment.type === "addComment" && commentText !== ""){
                             root.commentList.append({
                                 commentID: root.commentList.count,
-                                username: "@user",
+                                username: "@" + getUserName(),
                                 comment: commentText,
                                 time: "Just now",
                                 awner: true,
@@ -350,7 +351,7 @@ Page{
 
                         if(newComment.type === "addReply")
                             root.commentList.get(newComment.commentID).replyList.append({
-                                username: "@user",
+                                username: "@" + getUserName(),
                                 comment: newCommentTextField.text,
                                 time: "Just now",
                                 awner: true

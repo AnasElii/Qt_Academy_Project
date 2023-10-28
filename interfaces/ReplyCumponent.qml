@@ -17,6 +17,10 @@ Item{
     property alias commentText: comment.text
     property bool awner : false
 
+    function getAlpha() {
+        return root.username.substring(0, 1).toUpperCase();
+    }
+
     GridLayout{
         id: glContent
 
@@ -27,9 +31,10 @@ Item{
         // Profile Picture
         Rectangle{
             id: profilePicContainer
-            color: "transparent"
+            color: root.userColor
             width: 50
             height: 50
+            radius: 10
 
             Image {
                 id: profilePic
@@ -37,6 +42,7 @@ Item{
                 width: parent.width
                 source: "qrc:/resources/images/71z05dWWLHL.jpg"
                 fillMode: Image.PreserveAspectFit
+                visible: false
 
                 // Profile Image Mask
                 layer.enabled: true
@@ -48,6 +54,20 @@ Item{
                         fillMode: Image.PreserveAspectFit
                     }
                 }
+            }
+
+            Text{
+                id: profileText
+
+                visible: true
+                text: getAlpha()
+                font{
+                    family: "Texta"
+                    styleName: "Bold"
+                    pixelSize: 20
+                }
+                color: "white"
+                anchors.centerIn: parent
             }
         }
 
